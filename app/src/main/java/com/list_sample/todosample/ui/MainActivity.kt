@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         dialog.setView(editText)
         dialog.setPositiveButton(R.string.alert_dialog_ok, DialogInterface.OnClickListener { dialogInterface, i ->
             mRealm.executeTransaction {
-                if (!(isEmptyValidateRegex(editText?.text.toString()))) {
+                if (!(editText?.text.toString().matches("\\s+".toRegex()))) {
                     val todoModel = this.mRealm.createObject(TodoModel::class.java)
                     todoModel.todo = editText?.text.toString()
                     mRealm.copyToRealm(todoModel)
@@ -104,9 +104,5 @@ class MainActivity : AppCompatActivity() {
 
         dialog.show()
         Log.d(TAG, isEmptyValidateRegex("　").toString())
-    }
-
-    private fun isEmptyValidateRegex(text: String): Boolean {
-        if (text.matches("\\s+".toRegex())) return true else return false
     }
 }
