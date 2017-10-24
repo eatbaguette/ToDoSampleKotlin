@@ -25,7 +25,6 @@ import java.util.regex.Pattern
 
 class MainActivity : AppCompatActivity() {
     lateinit var mRealm: Realm
-    lateinit var mRecyclerView: RecyclerView
     lateinit var mAdapter: RecyclerViewAdapter
     lateinit var dateList: RealmResults<TodoModel>
 
