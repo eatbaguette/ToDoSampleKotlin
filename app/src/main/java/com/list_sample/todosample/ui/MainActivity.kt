@@ -9,6 +9,7 @@ import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
 import com.list_sample.todosample.R
@@ -24,7 +25,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var mRecyclerView: RecyclerView
     lateinit var mAdapter: RecyclerViewAdapter
     lateinit var dateList: RealmResults<TodoModel>
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,18 +42,18 @@ class MainActivity : AppCompatActivity() {
         this.dateList = mRealm.where(TodoModel::class.java).findAll()
 
         // RecyclerViewのセットアップ
-        mRecyclerView = findViewById(R.id.recyclerView_activity_main) as RecyclerView
         mAdapter = RecyclerViewAdapter(dateList)
         val layoutManager = LinearLayoutManager(applicationContext)
-        mRecyclerView.layoutManager = layoutManager
-        mRecyclerView.itemAnimator = DefaultItemAnimator()
-        mRecyclerView.adapter = mAdapter
-        mRecyclerView.addItemDecoration(DividerItemDecoration(this, 1))
+        recyclerView_activity_main.layoutManager = layoutManager
+        recyclerView_activity_main.itemAnimator = DefaultItemAnimator()
+        recyclerView_activity_main.adapter = mAdapter
+        recyclerView_activity_main.addItemDecoration(DividerItemDecoration(this, 1))
 
         fab_activity_main.setOnClickListener {
             showEditTextDialog()
         }
     }
+
 
     private fun showEditTextDialog() {
         val editText = EditText(this)
