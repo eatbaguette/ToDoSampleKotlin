@@ -20,6 +20,8 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 class MainActivity : AppCompatActivity() {
     lateinit var mRealm: Realm
@@ -89,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         dialog.setView(editText)
         dialog.setPositiveButton(R.string.alert_dialog_ok, DialogInterface.OnClickListener { dialogInterface, i ->
             mRealm.executeTransaction {
-                if (editText.text.toString() != "") {
+                if (!(isEmptyValidateRegex(editText?.text.toString()))) {
                     val todoModel = this.mRealm.createObject(TodoModel::class.java)
                     todoModel.todo = editText?.text.toString()
                     mRealm.copyToRealm(todoModel)
@@ -101,5 +103,10 @@ class MainActivity : AppCompatActivity() {
         })
 
         dialog.show()
+        Log.d(TAG, isEmptyValidateRegex("　").toString())
+    }
+
+    private fun isEmptyValidateRegex(text: String): Boolean {
+        if (text.matches("\\s+".toRegex())) return true else return false
     }
 }
