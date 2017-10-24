@@ -1,6 +1,5 @@
 package com.list_sample.todosample.ui
 
-import android.app.Dialog
 import android.content.DialogInterface
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -10,7 +9,6 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
 import com.list_sample.todosample.R
@@ -20,13 +18,11 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 class MainActivity : AppCompatActivity() {
     lateinit var mRealm: Realm
     lateinit var mAdapter: RecyclerViewAdapter
-    lateinit var dateList: RealmResults<TodoModel>
+    lateinit var todoList: RealmResults<TodoModel>
 
     val TAG = "MainActivity"
 
@@ -42,10 +38,10 @@ class MainActivity : AppCompatActivity() {
         mRealm = Realm.getInstance(realmConfig)
 
         // Realm読み込み
-        this.dateList = mRealm.where(TodoModel::class.java).findAll()
+        this.todoList = mRealm.where(TodoModel::class.java).findAll()
 
         // RecyclerViewのセットアップ
-        mAdapter = RecyclerViewAdapter(dateList)
+        mAdapter = RecyclerViewAdapter(todoList)
         val layoutManager = LinearLayoutManager(applicationContext)
         recyclerView_activity_main.layoutManager = layoutManager
         recyclerView_activity_main.itemAnimator = DefaultItemAnimator()
@@ -63,7 +59,7 @@ class MainActivity : AppCompatActivity() {
                         val position = viewHolder?.adapterPosition ?: return
 
                         mRealm.executeTransaction {
-                            dateList.deleteFromRealm(position)
+                            todoList.deleteFromRealm(position)
                         }
                         mAdapter!!.notifyItemRemoved(position)
                     }
