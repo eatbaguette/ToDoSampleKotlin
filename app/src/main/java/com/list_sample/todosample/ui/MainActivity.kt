@@ -52,7 +52,8 @@ class MainActivity : AppCompatActivity() {
         recyclerView_activity_main.itemAnimator = DefaultItemAnimator()
         recyclerView_activity_main.adapter = mAdapter
         recyclerView_activity_main.addItemDecoration(DividerItemDecoration(this, 1))
-        
+
+        // swipe to dismiss
         val itemTouchHelper = ItemTouchHelper(
                 object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT) {
                     override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?, target: RecyclerView.ViewHolder?): Boolean {
