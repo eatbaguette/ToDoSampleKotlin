@@ -89,9 +89,13 @@ class MainActivity : AppCompatActivity() {
         dialog.setView(editText)
         dialog.setPositiveButton(R.string.alert_dialog_ok, DialogInterface.OnClickListener { dialogInterface, i ->
             mRealm.executeTransaction {
-                val todoModel = this.mRealm.createObject(TodoModel::class.java)
-                todoModel.todo = editText?.text.toString()
-                mRealm.copyToRealm(todoModel)
+                if (editText.text.toString() != "") {
+                    val todoModel = this.mRealm.createObject(TodoModel::class.java)
+                    todoModel.todo = editText?.text.toString()
+                    mRealm.copyToRealm(todoModel)
+                } else {
+                    Toast.makeText(this, R.string.toast_null_cannot_save, Toast.LENGTH_SHORT).show()
+                }
             }
             mAdapter.notifyDataSetChanged()
         })
