@@ -26,6 +26,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var mAdapter: RecyclerViewAdapter
     lateinit var dateList: RealmResults<TodoModel>
 
+    val TAG = "MainActivity"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -35,7 +37,6 @@ class MainActivity : AppCompatActivity() {
         val realmConfig = RealmConfiguration.Builder()
                 .deleteRealmIfMigrationNeeded()
                 .build()
-        Realm.deleteRealm(realmConfig)
         mRealm = Realm.getInstance(realmConfig)
 
         // Realm読み込み
@@ -52,6 +53,11 @@ class MainActivity : AppCompatActivity() {
         fab_activity_main.setOnClickListener {
             showEditTextDialog()
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, this.dateList.toString())
     }
 
 
