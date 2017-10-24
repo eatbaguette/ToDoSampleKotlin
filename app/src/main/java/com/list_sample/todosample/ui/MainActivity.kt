@@ -9,6 +9,7 @@ import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
@@ -49,6 +50,26 @@ class MainActivity : AppCompatActivity() {
         recyclerView_activity_main.itemAnimator = DefaultItemAnimator()
         recyclerView_activity_main.adapter = mAdapter
         recyclerView_activity_main.addItemDecoration(DividerItemDecoration(this, 1))
+
+        val itemTouchHelper = ItemTouchHelper(
+                object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT) {
+                    override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?, target: RecyclerView.ViewHolder?): Boolean {
+                        return true
+                    }
+
+                    override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int) {
+                        val position = viewHolder?.adapterPosition ?: return
+
+                        mRealm.executeTransaction {
+                            dateList.deleteFromRealm(position)
+                        }
+                        mAdapter!!.notifyItemRemoved(position)
+                    }
+                }
+        )
+
+        itemTouchHelper.attachToRecyclerView(recyclerView_activity_main)
+
 
         fab_activity_main.setOnClickListener {
             showEditTextDialog()
