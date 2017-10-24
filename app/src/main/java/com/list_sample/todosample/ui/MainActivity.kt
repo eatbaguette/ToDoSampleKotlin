@@ -103,6 +103,5 @@ class MainActivity : AppCompatActivity() {
         })
 
         dialog.show()
-        Log.d(TAG, isEmptyValidateRegex("　").toString())
     }
 }
