@@ -9,6 +9,8 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.view.View
+import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Toast
 import com.list_sample.todosample.R
@@ -20,11 +22,11 @@ import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    lateinit var mRealm: Realm
-    lateinit var mAdapter: RecyclerViewAdapter
-    lateinit var todoList: RealmResults<TodoModel>
+    private lateinit var mRealm: Realm
+    private lateinit var mAdapter: RecyclerViewAdapter
+    private lateinit var todoList: RealmResults<TodoModel>
 
-    val TAG = "MainActivity"
+    private val TAG = "MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +49,11 @@ class MainActivity : AppCompatActivity() {
         recyclerView_activity_main.itemAnimator = DefaultItemAnimator()
         recyclerView_activity_main.adapter = mAdapter
         recyclerView_activity_main.addItemDecoration(DividerItemDecoration(this, 1))
+        mAdapter.setOnItemClickListener(onItemClickListener)
 
         // swipe to dismiss
         val itemTouchHelper = ItemTouchHelper(
-                object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT) {
+                object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.RIGHT, ItemTouchHelper.RIGHT) {
                     override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?, target: RecyclerView.ViewHolder?): Boolean {
                         return true
                     }
@@ -94,5 +97,13 @@ class MainActivity : AppCompatActivity() {
         })
 
         dialog.show()
+    }
+
+    // クリック時の処理を書く
+    private val onItemClickListener = object : RecyclerViewAdapter.OnItemClickListener {
+        override fun onItemClick(view: View, position: Int) {
+            val todoItem = mRealm.where(TodoModel::class.java).findAll()[position].todo
+            Toast.makeText(this@MainActivity, todoItem.toString(), Toast.LENGTH_SHORT).show()
+        }
     }
 }

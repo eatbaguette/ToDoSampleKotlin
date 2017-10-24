@@ -21,7 +21,9 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView_activity_main"
         android:layout_height="match_parent"
-        android:layout_width="match_parent"/>
+        android:layout_width="match_parent"
+        app:rippleColor="@color/colorAccent"
+        />
 
 
 </android.support.design.widget.CoordinatorLayout>
