@@ -51,11 +51,11 @@ class MainActivity : AppCompatActivity() {
         mRecyclerView.addItemDecoration(DividerItemDecoration(this, 1))
 
         fab_activity_main.setOnClickListener {
-            showEditTextDialog(mRealm)
+            showEditTextDialog()
         }
     }
 
-    private fun showEditTextDialog(mRealm: Realm) {
+    private fun showEditTextDialog() {
         val editText = EditText(this)
         val dialog = AlertDialog.Builder(this)
         dialog.setTitle(R.string.alert_dialog_title)
