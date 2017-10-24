@@ -91,6 +91,7 @@ class MainActivity : AppCompatActivity() {
         dialog.setView(editText)
         dialog.setPositiveButton(R.string.alert_dialog_ok, DialogInterface.OnClickListener { dialogInterface, i ->
             mRealm.executeTransaction {
+                // 空文字の場合と長さが0の場合は保存しない
                 if ((editText?.text.toString().length != 0) and !(editText?.text.toString().matches("\\s+".toRegex()))) {
                     val todoModel = this.mRealm.createObject(TodoModel::class.java)
                     todoModel.todo = editText?.text.toString()
