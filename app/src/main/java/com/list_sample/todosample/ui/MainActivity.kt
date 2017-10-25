@@ -79,7 +79,11 @@ class MainActivity : AppCompatActivity() {
             showEditTextDialog(CREATE_NEW_TODO)
         }
     }
-    
+
+    /**
+     * Todoを新規作成、編集するダイアログを出す。
+     * @param todoItemNumber Todoを編集する際にタップされたアイテムのポジション。新規作成の場合はCREATE_NEW_TODO(-1)が入る
+     */
     private fun showEditTextDialog(todoItemNumber: Int) {
         val editText = EditText(this)
         val dialog = AlertDialog.Builder(this)
