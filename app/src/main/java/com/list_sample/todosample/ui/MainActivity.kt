@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mAdapter: RecyclerViewAdapter
     private lateinit var todoList: RealmResults<TodoModel>
     private lateinit var increamentalSearchAdapter: RecyclerViewAdapter
+    private var incrementalSearchQuery = ""
 
     private val TAG = "MainActivity"
     private val CREATE_NEW_TODO = -1
@@ -102,6 +103,10 @@ class MainActivity : AppCompatActivity() {
 
                     todoList = mRealm.where(TodoModel::class.java).like("todo", "*$newText*").findAll()
 
+                    incrementalSearchQuery = newText
+                    Log.d(TAG, "newText is $newText")
+                    Log.d(TAG, "incremental search query is $incrementalSearchQuery")
+
                     increamentalSearchAdapter = RecyclerViewAdapter(todoList)
                     recyclerView_activity_main.swapAdapter(increamentalSearchAdapter, false)
                     increamentalSearchAdapter.setOnItemClickListener(onItemClickListener)
@@ -130,7 +135,7 @@ class MainActivity : AppCompatActivity() {
         val editText = EditText(this)
         val dialog = AlertDialog.Builder(this)
 
-        if (todoItemNumber != CREATE_NEW_TODO) editText.setText(mRealm.where(TodoModel::class.java).findAll()[todoItemNumber].todo)
+        if (todoItemNumber != CREATE_NEW_TODO) editText.setText(mRealm.where(TodoModel::class.java).like("todo", "*$incrementalSearchQuery*").findAll()[todoItemNumber].todo)
 
         dialog.setTitle(R.string.alert_dialog_title)
         dialog.setView(editText)
@@ -146,14 +151,16 @@ class MainActivity : AppCompatActivity() {
                         todoModel.todo = editText?.text.toString()
                         mRealm.copyToRealm(todoModel)
                     } else {
-                        mRealm.where(TodoModel::class.java).findAll()[todoItemNumber].todo = editText?.text.toString()
+                        mRealm.where(TodoModel::class.java).like("todo", "*$incrementalSearchQuery*").findAll()[todoItemNumber].todo = editText.text.toString()
+                        Log.d(TAG, mRealm.where(TodoModel::class.java).like("todo", "*$incrementalSearchQuery*").findAll()[todoItemNumber].todo)
                     }
 
                 } else {
                     Toast.makeText(this, R.string.toast_null_cannot_save, Toast.LENGTH_SHORT).show()
                 }
             }
-            mAdapter.notifyDataSetChanged()
+            increamentalSearchAdapter?.notifyDataSetChanged()
+            mAdapter?.notifyDataSetChanged()
         })
 
         dialog.show()
