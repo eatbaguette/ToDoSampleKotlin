@@ -9,6 +9,7 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.EditText
@@ -18,6 +19,7 @@ import com.list_sample.todosample.adapter.RecyclerViewAdapter
 import com.list_sample.todosample.model.TodoModel
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import io.realm.RealmObject
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -27,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var todoList: RealmResults<TodoModel>
 
     private val TAG = "MainActivity"
+    private val CREATE_NEW_TODO = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,22 +76,36 @@ class MainActivity : AppCompatActivity() {
 
 
         fab_activity_main.setOnClickListener {
-            showEditTextDialog()
+            showEditTextDialog(CREATE_NEW_TODO)
         }
     }
 
-    private fun showEditTextDialog() {
+    private fun showEditTextDialog(todoItemNumber: Int) {
         val editText = EditText(this)
         val dialog = AlertDialog.Builder(this)
+
+        if (todoItemNumber != CREATE_NEW_TODO) editText.setText(mRealm.where(TodoModel::class.java).findAll()[todoItemNumber].todo)
+
         dialog.setTitle(R.string.alert_dialog_title)
         dialog.setView(editText)
         dialog.setPositiveButton(R.string.alert_dialog_ok, DialogInterface.OnClickListener { dialogInterface, i ->
             mRealm.executeTransaction {
+
                 // 空文字の場合と長さが0の場合は保存しない
                 if ((editText?.text.toString().length != 0) and !(editText?.text.toString().matches("\\s+".toRegex()))) {
-                    val todoModel = this.mRealm.createObject(TodoModel::class.java)
-                    todoModel.todo = editText?.text.toString()
-                    mRealm.copyToRealm(todoModel)
+
+
+                    // 新規作成なら保存。それ以外なら既存の場所に作成
+                    if (todoItemNumber == CREATE_NEW_TODO) {
+                        val todoModel = this.mRealm.createObject(TodoModel::class.java)
+                        todoModel.todo = editText?.text.toString()
+                        mRealm.copyToRealm(todoModel)
+                        Log.d(TAG, "新規作成")
+                    } else {
+                        Log.d(TAG, "編集")
+                        mRealm.where(TodoModel::class.java).findAll()[todoItemNumber].todo = editText?.text.toString()
+                    }
+
                 } else {
                     Toast.makeText(this, R.string.toast_null_cannot_save, Toast.LENGTH_SHORT).show()
                 }
@@ -102,8 +119,8 @@ class MainActivity : AppCompatActivity() {
     // クリック時の処理を書く
     private val onItemClickListener = object : RecyclerViewAdapter.OnItemClickListener {
         override fun onItemClick(view: View, position: Int) {
-            val todoItem = mRealm.where(TodoModel::class.java).findAll()[position].todo
-            Toast.makeText(this@MainActivity, todoItem.toString(), Toast.LENGTH_SHORT).show()
+            //val todoItem = mRealm.where(TodoModel::class.java).findAll()[position].todo
+            showEditTextDialog(position)
         }
     }
 }
