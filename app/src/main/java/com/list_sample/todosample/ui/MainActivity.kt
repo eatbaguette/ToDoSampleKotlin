@@ -120,7 +120,6 @@ class MainActivity : AppCompatActivity() {
     // クリック時の処理を書く
     private val onItemClickListener = object : RecyclerViewAdapter.OnItemClickListener {
         override fun onItemClick(view: View, position: Int) {
-            //val todoItem = mRealm.where(TodoModel::class.java).findAll()[position].todo
             showEditTextDialog(position)
         }
     }
