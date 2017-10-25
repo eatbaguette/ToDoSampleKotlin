@@ -7,6 +7,7 @@ Realm
 RecyclerView
 IncrementalSearch
 Toolbar/ Search View
+addTextChangedListener
 
 
 # 詰まった点と解決策と参考URL
@@ -17,6 +18,10 @@ Toolbar/ Search View
 ## Realm とRecycler View のIncremental Search
 普通にRecyclerViewみたいにrealm.whereを使ってRealmResultを作って、notifyDatasetChanged を読んでも更新されない。
 Adapter2つ作ってswapAdapterしてやるのがいい。
+
+## AddTextChangedListener
+EditTextの文字が変更されたら呼ばれる
+参考ULR: http://developers-club.com/posts/258683/
 
 
 # 参考URL
