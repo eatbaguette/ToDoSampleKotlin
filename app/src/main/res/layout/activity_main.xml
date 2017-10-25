@@ -7,6 +7,15 @@
     android:layout_height="match_parent"
     tools:context="com.list_sample.todosample.ui.MainActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_activity_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorAccent"
+        android:elevation="4dp">
+    </android.support.v7.widget.Toolbar>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_activity_main"
         android:layout_height="wrap_content"
@@ -23,6 +32,7 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         app:rippleColor="@color/colorAccent"
+        android:layout_marginTop="?attr/actionBarSize"
         />
 
 

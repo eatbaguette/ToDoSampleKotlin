@@ -9,7 +9,9 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.text.TextUtils
 import android.util.Log
+import android.view.Menu
 import android.view.View
 import android.widget.AdapterView
 import android.widget.EditText
@@ -34,6 +36,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // ツールバーのセットアップ
+        toolbar_activity_main.inflateMenu(R.menu.search_menu)
+        setSupportActionBar(toolbar_activity_main)
 
         // Realmのセットアップ
         Realm.init(this)
@@ -79,6 +85,36 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.search_menu, menu)
+        val searchItem = menu!!.findItem(R.id.search_view)
+        val searchView = searchItem.actionView as android.support.v7.widget.SearchView
+
+        searchView.setOnQueryTextListener(object: android.support.v7.widget.SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String): Boolean {
+                Log.d(TAG, "submitted text is $query")
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                if (!(newText.matches("\\s+".toRegex()))) {
+                    val searchedItem =  mRealm.where(TodoModel::class.java).like("todo", "*$newText*").findAll()
+                    todoList = searchedItem
+
+                    Log.d(TAG, newText)
+                    Log.d(TAG, "*$newText*")
+                    Log.d(TAG, mRealm.where(TodoModel::class.java).like("todo", "*$newText*").findAll().toString())
+                    mAdapter.notifyDataSetChanged()
+
+                }
+
+                return true
+            }
+        })
+
+        return true
+    }
+
     /**
      * Todoを新規作成、編集するダイアログを出す。
      * @param todoItemNumber Todoを編集する際にタップされたアイテムのポジション。新規作成の場合はCREATE_NEW_TODO(-1)が入る
@@ -95,7 +131,7 @@ class MainActivity : AppCompatActivity() {
             mRealm.executeTransaction {
 
                 // 空文字の場合と長さが0の場合は保存しない
-                if ((editText?.text.toString().length != 0) and !(editText?.text.toString().matches("\\s+".toRegex()))) {
+                if ((editText?.text.toString().length != 0) and !(editText.text.toString().matches("\\s+".toRegex()))) {
 
                     // 新規作成なら保存。それ以外なら既存の場所に作成
                     if (todoItemNumber == CREATE_NEW_TODO) {
