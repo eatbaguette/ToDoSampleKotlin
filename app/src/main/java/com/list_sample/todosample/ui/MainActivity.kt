@@ -109,8 +109,6 @@ class MainActivity : AppCompatActivity() {
                     recyclerView_activity_main.swapAdapter(incrementalSearchAdapter, false)
                     incrementalSearchAdapter.setOnItemClickListener(onItemClickListener)
                 }
-
-
                 return true
             }
         })
