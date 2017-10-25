@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity() {
 
         // Realm読み込み
         this.todoList = mRealm.where(TodoModel::class.java).findAll()
-        Log.d(TAG, "initial todo list is $todoList")
 
         // RecyclerViewのセットアップ
         mAdapter = RecyclerViewAdapter(todoList)
@@ -101,14 +100,10 @@ class MainActivity : AppCompatActivity() {
                     todoList = mRealm.where(TodoModel::class.java).like("todo", "*$newText*").findAll()
 
                     incrementalSearchQuery = newText
-                    Log.d(TAG, "newText is $newText")
-                    Log.d(TAG, "incremental search query is $incrementalSearchQuery")
 
                     incrementalSearchAdapter = RecyclerViewAdapter(todoList)
                     recyclerView_activity_main.swapAdapter(incrementalSearchAdapter, false)
                     incrementalSearchAdapter.setOnItemClickListener(onItemClickListener)
-
-                    Log.d(TAG, "todo list is $todoList")
                 }
 
 
@@ -149,7 +144,6 @@ class MainActivity : AppCompatActivity() {
                         mRealm.copyToRealm(todoModel)
                     } else {
                         mRealm.where(TodoModel::class.java).like("todo", "*$incrementalSearchQuery*").findAll()[todoItemNumber].todo = editText.text.toString()
-                        Log.d(TAG, mRealm.where(TodoModel::class.java).like("todo", "*$incrementalSearchQuery*").findAll()[todoItemNumber].todo)
                     }
 
                 } else {
