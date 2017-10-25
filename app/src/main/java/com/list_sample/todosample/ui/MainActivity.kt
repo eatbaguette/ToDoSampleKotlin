@@ -52,6 +52,8 @@ class MainActivity : AppCompatActivity() {
 
         // RecyclerViewのセットアップ
         mAdapter = RecyclerViewAdapter(todoList)
+        incrementalSearchAdapter = RecyclerViewAdapter(todoList) //notifyDatasetChangedで落ちるので初期化しておく。
+
         val layoutManager = LinearLayoutManager(applicationContext)
         recyclerView_activity_main.layoutManager = layoutManager
         recyclerView_activity_main.itemAnimator = DefaultItemAnimator()
@@ -94,6 +96,8 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
 
+            // SearchViewに文字が入力されたらAdapterをincrementalSearchAdapterに差し替え
+            // Adapterを差し替えないとRecyclerViewがnotifyDatasetChangedで更新されないため
             override fun onQueryTextChange(newText: String): Boolean {
                 if (!(newText.matches("\\s+".toRegex()))) {
 
@@ -114,6 +118,7 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    // SearchViewが閉じたらAdapterをmAdapterに戻しておく。
     override fun onOptionsMenuClosed(menu: Menu?) {
         super.onOptionsMenuClosed(menu)
         recyclerView_activity_main.swapAdapter(mAdapter, false)
@@ -150,7 +155,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, R.string.toast_null_cannot_save, Toast.LENGTH_SHORT).show()
                 }
             }
-            incrementalSearchAdapter?.notifyDataSetChanged()
+            incrementalSearchAdapter.notifyDataSetChanged()
             mAdapter?.notifyDataSetChanged()
         })
 
