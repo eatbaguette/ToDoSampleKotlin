@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         toolbar_activity_main.inflateMenu(R.menu.search_menu)
         setSupportActionBar(toolbar_activity_main)
 
+
         // Realmのセットアップ
         Realm.init(this)
         val realmConfig = RealmConfiguration.Builder()
@@ -90,6 +91,7 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.search_menu, menu)
         val searchItem = menu!!.findItem(R.id.search_view)
         val searchView = searchItem.actionView as android.support.v7.widget.SearchView
+        searchView.queryHint = "することを検索"
 
         searchView.setOnQueryTextListener(object: android.support.v7.widget.SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String): Boolean {
