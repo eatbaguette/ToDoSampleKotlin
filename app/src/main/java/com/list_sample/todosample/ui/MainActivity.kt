@@ -9,11 +9,9 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.text.TextUtils
 import android.util.Log
 import android.view.Menu
 import android.view.View
-import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Toast
 import com.list_sample.todosample.R
@@ -21,7 +19,6 @@ import com.list_sample.todosample.adapter.RecyclerViewAdapter
 import com.list_sample.todosample.model.TodoModel
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import io.realm.RealmObject
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -29,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mRealm: Realm
     private lateinit var mAdapter: RecyclerViewAdapter
     private lateinit var todoList: RealmResults<TodoModel>
-    private lateinit var increamentalSearchAdapter: RecyclerViewAdapter
+    private lateinit var incrementalSearchAdapter: RecyclerViewAdapter
     private var incrementalSearchQuery = ""
 
     private val TAG = "MainActivity"
@@ -107,9 +104,9 @@ class MainActivity : AppCompatActivity() {
                     Log.d(TAG, "newText is $newText")
                     Log.d(TAG, "incremental search query is $incrementalSearchQuery")
 
-                    increamentalSearchAdapter = RecyclerViewAdapter(todoList)
-                    recyclerView_activity_main.swapAdapter(increamentalSearchAdapter, false)
-                    increamentalSearchAdapter.setOnItemClickListener(onItemClickListener)
+                    incrementalSearchAdapter = RecyclerViewAdapter(todoList)
+                    recyclerView_activity_main.swapAdapter(incrementalSearchAdapter, false)
+                    incrementalSearchAdapter.setOnItemClickListener(onItemClickListener)
 
                     Log.d(TAG, "todo list is $todoList")
                 }
@@ -159,7 +156,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, R.string.toast_null_cannot_save, Toast.LENGTH_SHORT).show()
                 }
             }
-            increamentalSearchAdapter?.notifyDataSetChanged()
+            incrementalSearchAdapter?.notifyDataSetChanged()
             mAdapter?.notifyDataSetChanged()
         })
 
