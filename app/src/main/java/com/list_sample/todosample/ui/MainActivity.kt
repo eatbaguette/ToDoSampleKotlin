@@ -71,7 +71,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
         )
-
         itemTouchHelper.attachToRecyclerView(recyclerView_activity_main)
 
 
