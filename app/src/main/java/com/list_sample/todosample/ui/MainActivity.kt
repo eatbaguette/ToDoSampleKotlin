@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity() {
         val editText = EditText(this)
         val dialog = AlertDialog.Builder(this)
 
-        if (todoItemNumber != CREATE_NEW_TODO) editText.setText(mRealm.where(TodoModel::class.java).like("todo", "*$incrementalSearchQuery*").findAll()[todoItemNumber].todo)
+        if (todoItemNumber != CREATE_NEW_TODO) editText.setText(mRealm.where(TodoModel::class.java).like(getString(R.string.todo), "*$incrementalSearchQuery*").findAll()[todoItemNumber].todo)
 
         dialog.setTitle(R.string.alert_dialog_title)
         dialog.setView(editText)
@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity() {
                         todoModel.todo = editText?.text.toString()
                         mRealm.copyToRealm(todoModel)
                     } else {
-                        mRealm.where(TodoModel::class.java).like("todo", "*$incrementalSearchQuery*").findAll()[todoItemNumber].todo = editText.text.toString()
+                        mRealm.where(TodoModel::class.java).like(getString(R.string.todo), "*$incrementalSearchQuery*").findAll()[todoItemNumber].todo = editText.text.toString()
                     }
 
                 } else {
