@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mRealm: Realm
     private lateinit var mAdapter: RecyclerViewAdapter
     private lateinit var todoList: RealmResults<TodoModel>
+    private lateinit var increamentalSearchAdapter: RecyclerViewAdapter
 
     private val TAG = "MainActivity"
     private val CREATE_NEW_TODO = -1
@@ -50,6 +51,7 @@ class MainActivity : AppCompatActivity() {
 
         // Realm読み込み
         this.todoList = mRealm.where(TodoModel::class.java).findAll()
+        Log.d(TAG, "initial todo list is $todoList")
 
         // RecyclerViewのセットアップ
         mAdapter = RecyclerViewAdapter(todoList)
@@ -92,27 +94,32 @@ class MainActivity : AppCompatActivity() {
 
         searchView.setOnQueryTextListener(object: android.support.v7.widget.SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String): Boolean {
-                Log.d(TAG, "submitted text is $query")
                 return true
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
                 if (!(newText.matches("\\s+".toRegex()))) {
-                    val searchedItem =  mRealm.where(TodoModel::class.java).like("todo", "*$newText*").findAll()
-                    todoList = searchedItem
 
-                    Log.d(TAG, newText)
-                    Log.d(TAG, "*$newText*")
-                    Log.d(TAG, mRealm.where(TodoModel::class.java).like("todo", "*$newText*").findAll().toString())
-                    mAdapter.notifyDataSetChanged()
+                    todoList = mRealm.where(TodoModel::class.java).like("todo", "*$newText*").findAll()
 
+                    increamentalSearchAdapter = RecyclerViewAdapter(todoList)
+                    recyclerView_activity_main.swapAdapter(increamentalSearchAdapter, false)
+                    increamentalSearchAdapter.setOnItemClickListener(onItemClickListener)
+
+                    Log.d(TAG, "todo list is $todoList")
                 }
+
 
                 return true
             }
         })
-
+        mAdapter.notifyDataSetChanged()
         return true
+    }
+
+    override fun onOptionsMenuClosed(menu: Menu?) {
+        super.onOptionsMenuClosed(menu)
+        recyclerView_activity_main.swapAdapter(mAdapter, false)
     }
 
     /**
