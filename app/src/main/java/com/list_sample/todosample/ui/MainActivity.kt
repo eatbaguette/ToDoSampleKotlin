@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
             showEditTextDialog(CREATE_NEW_TODO)
         }
     }
-
+    
     private fun showEditTextDialog(todoItemNumber: Int) {
         val editText = EditText(this)
         val dialog = AlertDialog.Builder(this)
@@ -94,15 +94,12 @@ class MainActivity : AppCompatActivity() {
                 // 空文字の場合と長さが0の場合は保存しない
                 if ((editText?.text.toString().length != 0) and !(editText?.text.toString().matches("\\s+".toRegex()))) {
 
-
                     // 新規作成なら保存。それ以外なら既存の場所に作成
                     if (todoItemNumber == CREATE_NEW_TODO) {
                         val todoModel = this.mRealm.createObject(TodoModel::class.java)
                         todoModel.todo = editText?.text.toString()
                         mRealm.copyToRealm(todoModel)
-                        Log.d(TAG, "新規作成")
                     } else {
-                        Log.d(TAG, "編集")
                         mRealm.where(TodoModel::class.java).findAll()[todoItemNumber].todo = editText?.text.toString()
                     }
 
