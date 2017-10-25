@@ -9,6 +9,8 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.Menu
 import android.view.View
@@ -21,6 +23,7 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.recycler_view_cell.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mRealm: Realm
@@ -131,6 +134,20 @@ class MainActivity : AppCompatActivity() {
     private fun showEditTextDialog(todoItemNumber: Int) {
         val editText = EditText(this)
         val dialog = AlertDialog.Builder(this)
+
+        // Todo 使わなかったら消す
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+        })
 
         if (todoItemNumber != CREATE_NEW_TODO) editText.setText(mRealm.where(TodoModel::class.java).like(getString(R.string.todo), "*$incrementalSearchQuery*").findAll()[todoItemNumber].todo)
 
